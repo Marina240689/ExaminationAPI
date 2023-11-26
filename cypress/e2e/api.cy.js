@@ -1,4 +1,3 @@
-///<reference types="cypress"/>
 import users from '../fixtures/user.json'
 import post from '../fixtures/posts.json'
 import { faker, ur } from '@faker-js/faker'
@@ -156,12 +155,11 @@ describe('API', () => {
 
     let postId;
     let newPostBody;
-     let updatedBody;
+    let updatedBody;
 
     cy.request({
       method: 'POST',
       url: '/posts',
-      // failOnStatusCode: false,
       body: post,
       headers: {
         'Content-Type': 'application/json'
@@ -172,10 +170,9 @@ describe('API', () => {
       expect(response.body.body).to.eq(post.body)
       postId = response.body.id;
       newPostBody = response.body.body;
-      // console.log(postId)
     }).then(() => {
       post.body = faker.lorem.paragraph();
-      
+
       cy.request({
         method: 'PUT',
         url: `/posts/${postId}`,
@@ -187,15 +184,13 @@ describe('API', () => {
         expect(response.status).to.eq(200);
         expect(response.body.body).to.eq(post.body)
         console.log(response.body)
-  
-        updatedBody = response.body.body;
-  
-        expect(updatedBody).to.not.eq(newPostBody)
-  
-      })
 
+        updatedBody = response.body.body;
+
+        expect(updatedBody).to.not.eq(newPostBody)
+
+      })
     })
-  
   })
 
   it('Delete non-existing post entity. Verify HTTP response status code.', () => {
@@ -209,13 +204,11 @@ describe('API', () => {
     })
   })
 
-
-
   it('Create post entity, update the created entity, and delete the entity. Verify HTTP response status code and verify that the entity is deleted.', () => {
 
     let postId;
     let newPostBody;
-     let updatedBody;
+    let updatedBody;
 
     cy.request({
       method: 'POST',
@@ -231,7 +224,7 @@ describe('API', () => {
       postId = response.body.id;
     }).then(() => {
       post.body = faker.lorem.paragraph();
-      
+
       cy.request({
         method: 'PUT',
         url: `/posts/${postId}`,
@@ -242,38 +235,34 @@ describe('API', () => {
       }).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.body).to.eq(post.body)
-  
+
         updatedBody = response.body.body;
-  
+
         expect(updatedBody).to.not.eq(newPostBody)
-  
+
       }).then(() => {
 
-    cy.request({
-      method: 'DELETE',
-      url: `/posts/${postId}`,
+        cy.request({
+          method: 'DELETE',
+          url: `/posts/${postId}`,
 
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-    }).then (() => {
-
-      cy.request({
-        method: 'GET',
-        url: `/posts/${postId}`,
-        failOnStatusCode: false,
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8'
-        }
         }).then((response) => {
-          expect(response.status).to.eq(404);
+          expect(response.status).to.eq(200);
+        }).then(() => {
 
-      })
+          cy.request({
+            method: 'GET',
+            url: `/posts/${postId}`,
+            failOnStatusCode: false,
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8'
+            }
+          }).then((response) => {
+            expect(response.status).to.eq(404);
 
+          })
 
-
-
-
-    })   
+        })
       })
 
     })
@@ -281,7 +270,7 @@ describe('API', () => {
   })
 
 
-  })
+})
 
 
 
