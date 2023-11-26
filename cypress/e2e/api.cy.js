@@ -222,6 +222,7 @@ describe('API', () => {
       expect(response.body.title).to.eq(post.title)
       expect(response.body.body).to.eq(post.body)
       postId = response.body.id;
+      newPostBody = response.body.body
     }).then(() => {
       post.body = faker.lorem.paragraph();
 
